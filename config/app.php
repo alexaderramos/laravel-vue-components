@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Laravel Vue Components'),
 
     /*
     |--------------------------------------------------------------------------
@@ -119,7 +119,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY','base64:cj32JkY8/TWHk55tt/wqJn3yS1wjxF201e6HEJ0YG40='),
 
     'cipher' => 'AES-256-CBC',
 
