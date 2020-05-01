@@ -1985,6 +1985,47 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component mounted.');
@@ -2017,15 +2058,36 @@ __webpack_require__.r(__webpack_exports__);
     },
     getLinksPages: function getLinksPages() {
       var cant = this.pagination.total / Number(this.pagination.perPage);
-      var i = 0;
       this.pagination.links = [];
+      var cumstom_links = [];
+      /*obtiene los numeros de todas las paginas*/
 
-      for (i; i < cant; i++) {
-        this.pagination.links[i] = i + 1;
+      for (var i = 0; i < cant; i++) {
+        this.pagination.links.push(i + 1);
       }
 
       this.pagination.lastPage = this.pagination.links.length;
-      return this.pagination.links;
+      var start = 0;
+      var limit = 5;
+
+      if (this.pagination.currentPage < 3) {
+        start = 0;
+        return this.pagination.links.slice(start, limit);
+      } else if (this.pagination.currentPage >= 3 && this.pagination.currentPage - 1 + 2 < this.pagination.lastPage) {
+        start = this.pagination.currentPage - 1 - 2;
+        limit = start + limit;
+        return this.pagination.links.slice(start, limit);
+      } else {
+        if (this.pagination.links.length == 4) {
+          start = 0;
+          limit = start + limit;
+          return this.pagination.links.slice(start, limit);
+        } else {
+          start = this.pagination.lastPage - 1 - 4;
+          limit = start + limit;
+          return this.pagination.links.slice(start, limit);
+        }
+      }
     },
     isCurrentPage: function isCurrentPage() {
       return this.pagination.currentPage;
@@ -2055,6 +2117,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       var url = 'api/allUsers';
+      this.users = [];
       axios.get(url).then(function (response) {
         _this2.users = response.data;
         _this2.total = _this2.users.length;
@@ -38366,11 +38429,45 @@ var render = function() {
       _c("div", { staticClass: "col-md-8" }, [
         _c("div", { staticClass: "card" }, [
           _c("div", { staticClass: "card-header" }, [
-            _vm._v("Todos los usuarios "),
-            _c("b", [_vm._v(_vm._s(this.pagination.total))]),
+            _vm._v("Todos los usuarios \n                    "),
+            _c(
+              "b",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.users.length != 0,
+                    expression: "users.length != 0"
+                  }
+                ]
+              },
+              [_vm._v(_vm._s(this.pagination.total))]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "row" }, [
-              _c("div", { staticClass: "col-md-3" }, [
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.users.length == 0,
+                    expression: "users.length == 0"
+                  }
+                ],
+                staticClass: "text-success"
+              },
+              [
+                _c("i", { staticClass: "fad fa-spinner fa-pulse" }),
+                _vm._v(
+                  "\n                        Espere un momento...\n                    "
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "row pt-2" }, [
+              _c("div", { staticClass: "col-md-2" }, [
                 _c(
                   "select",
                   {
@@ -38405,16 +38502,16 @@ var render = function() {
                     }
                   },
                   [
-                    _c("option", { attrs: { value: "5" } }, [_vm._v("5")]),
-                    _vm._v(" "),
                     _c("option", { attrs: { value: "10" } }, [_vm._v("10")]),
+                    _vm._v(" "),
+                    _c("option", { attrs: { value: "25" } }, [_vm._v("25")]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "50" } }, [_vm._v("50")])
                   ]
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "col-md-5 offset-md-4" }, [
+              _c("div", { staticClass: "col-md-5 offset-md-5" }, [
                 _c("input", {
                   directives: [
                     {
@@ -38479,104 +38576,176 @@ var render = function() {
           ),
           _vm._v(" "),
           _c("div", { staticClass: "card-footer" }, [
-            _c("nav", { attrs: { "aria-label": "Page navigation" } }, [
-              _c(
-                "ul",
-                { staticClass: "pagination" },
-                [
-                  _vm.pagination.currentPage == 1
-                    ? _c("li", { staticClass: "page-item disabled" }, [
-                        _vm._m(1)
-                      ])
-                    : _c("li", { staticClass: "page-item" }, [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "page-link",
-                            attrs: { href: "#", "aria-label": "Previous" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                return _vm.changePage(
-                                  _vm.pagination.currentPage - 1
-                                )
-                              }
-                            }
-                          },
-                          [
-                            _c("span", { attrs: { "aria-hidden": "true" } }, [
-                              _vm._v("«")
-                            ]),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "sr-only" }, [
-                              _vm._v("Previous")
-                            ])
-                          ]
-                        )
-                      ]),
-                  _vm._v(" "),
-                  _vm._l(_vm.getLinksPages, function(page, index) {
-                    return _c(
-                      "li",
-                      {
-                        staticClass: "page-item",
-                        class: [page === _vm.isCurrentPage ? "active" : ""]
-                      },
-                      [
-                        page === _vm.isCurrentPage
-                          ? _c("span", { staticClass: "page-link" }, [
-                              _vm._v(_vm._s(page))
-                            ])
-                          : _c(
-                              "a",
-                              {
-                                staticClass: "page-link",
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    return _vm.changePage(page)
-                                  }
+            _c(
+              "nav",
+              {
+                staticClass: "float-left",
+                attrs: { "aria-label": "Page navigation" }
+              },
+              [
+                _c(
+                  "ul",
+                  { staticClass: "pagination" },
+                  [
+                    _vm.pagination.currentPage == 1
+                      ? _c("li", { staticClass: "page-item disabled" }, [
+                          _vm._m(1)
+                        ])
+                      : _c("li", { staticClass: "page-item" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "page-link",
+                              attrs: { href: "#", "aria-label": "Previous" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.changePage(1)
                                 }
-                              },
-                              [_vm._v(_vm._s(page))]
-                            )
-                      ]
-                    )
-                  }),
-                  _vm._v(" "),
-                  _vm.pagination.currentPage == _vm.pagination.lastPage
-                    ? _c("li", { staticClass: "page-item disabled" }, [
-                        _vm._m(2)
-                      ])
-                    : _c("li", { staticClass: "page-item" }, [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "page-link",
-                            attrs: { href: "#", "aria-label": "Next" },
-                            on: {
-                              click: function($event) {
-                                $event.preventDefault()
-                                return _vm.changePage(
-                                  _vm.pagination.currentPage + 1
-                                )
                               }
-                            }
-                          },
-                          [
-                            _c("span", { attrs: { "aria-hidden": "true" } }, [
-                              _vm._v("»")
-                            ]),
-                            _vm._v(" "),
-                            _c("span", { staticClass: "sr-only" }, [
-                              _vm._v("Next")
-                            ])
-                          ]
-                        )
-                      ])
-                ],
-                2
+                            },
+                            [
+                              _vm._m(2),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("Previous")
+                              ])
+                            ]
+                          )
+                        ]),
+                    _vm._v(" "),
+                    _vm.pagination.currentPage == 1
+                      ? _c("li", { staticClass: "page-item disabled" }, [
+                          _vm._m(3)
+                        ])
+                      : _c("li", { staticClass: "page-item" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "page-link",
+                              attrs: { href: "#", "aria-label": "Previous" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.changePage(
+                                    _vm.pagination.currentPage - 1
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _vm._m(4),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("Previous")
+                              ])
+                            ]
+                          )
+                        ]),
+                    _vm._v(" "),
+                    _vm._l(_vm.getLinksPages, function(page, index) {
+                      return _c(
+                        "li",
+                        {
+                          staticClass: "page-item",
+                          class: [page === _vm.isCurrentPage ? "active" : ""]
+                        },
+                        [
+                          page === _vm.isCurrentPage
+                            ? _c("span", { staticClass: "page-link" }, [
+                                _vm._v(_vm._s(page))
+                              ])
+                            : _c(
+                                "a",
+                                {
+                                  staticClass: "page-link",
+                                  attrs: { href: "#" },
+                                  on: {
+                                    click: function($event) {
+                                      $event.preventDefault()
+                                      return _vm.changePage(page)
+                                    }
+                                  }
+                                },
+                                [_vm._v(_vm._s(page))]
+                              )
+                        ]
+                      )
+                    }),
+                    _vm._v(" "),
+                    _vm.pagination.currentPage == _vm.pagination.lastPage
+                      ? _c("li", { staticClass: "page-item disabled" }, [
+                          _vm._m(5)
+                        ])
+                      : _c("li", { staticClass: "page-item" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "page-link",
+                              attrs: { href: "#", "aria-label": "Next" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.changePage(
+                                    _vm.pagination.currentPage + 1
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _vm._m(6),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("Next")
+                              ])
+                            ]
+                          )
+                        ]),
+                    _vm._v(" "),
+                    _vm.pagination.currentPage == _vm.pagination.lastPage
+                      ? _c("li", { staticClass: "page-item disabled" }, [
+                          _vm._m(7)
+                        ])
+                      : _c("li", { staticClass: "page-item" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "page-link",
+                              attrs: { href: "#", "aria-label": "Next" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  return _vm.changePage(_vm.pagination.lastPage)
+                                }
+                              }
+                            },
+                            [
+                              _vm._m(8),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "sr-only" }, [
+                                _vm._v("Next")
+                              ])
+                            ]
+                          )
+                        ])
+                  ],
+                  2
+                )
+              ]
+            ),
+            _vm._v(" "),
+            _c("div", { staticClass: "float-right" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-success",
+                  attrs: { type: "button" },
+                  on: { click: _vm.getAllUsers }
+                },
+                [
+                  _c("i", { staticClass: "fad fa-sync-alt" }),
+                  _vm._v(" Actualizar")
+                ]
               )
             ])
           ])
@@ -38611,11 +38780,21 @@ var staticRenderFns = [
         attrs: { href: "#", "aria-label": "Previous" }
       },
       [
-        _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("«")]),
+        _c("span", { attrs: { "aria-hidden": "true" } }, [
+          _c("i", { staticClass: "fad fa-fast-backward" })
+        ]),
         _vm._v(" "),
         _c("span", { staticClass: "sr-only" }, [_vm._v("Previous")])
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { attrs: { "aria-hidden": "true" } }, [
+      _c("i", { staticClass: "fad fa-fast-backward" })
+    ])
   },
   function() {
     var _vm = this
@@ -38628,11 +38807,75 @@ var staticRenderFns = [
         attrs: { href: "#", "aria-label": "Previous" }
       },
       [
-        _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("»")]),
+        _c("span", { attrs: { "aria-hidden": "true" } }, [
+          _c("i", { staticClass: "fad fa-step-backward" })
+        ]),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Previous")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { attrs: { "aria-hidden": "true" } }, [
+      _c("i", { staticClass: "fad fa-step-backward" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "page-link",
+        attrs: { href: "#", "aria-label": "Previous" }
+      },
+      [
+        _c("span", { attrs: { "aria-hidden": "true" } }, [
+          _c("i", { staticClass: "fad fa-step-forward" })
+        ]),
         _vm._v(" "),
         _c("span", { staticClass: "sr-only" }, [_vm._v("Next")])
       ]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { attrs: { "aria-hidden": "true" } }, [
+      _c("i", { staticClass: "fad fa-step-forward" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "page-link",
+        attrs: { href: "#", "aria-label": "Previous" }
+      },
+      [
+        _c("span", { attrs: { "aria-hidden": "true" } }, [
+          _c("i", { staticClass: "fad fa-fast-forward" })
+        ]),
+        _vm._v(" "),
+        _c("span", { staticClass: "sr-only" }, [_vm._v("Next")])
+      ]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("span", { attrs: { "aria-hidden": "true" } }, [
+      _c("i", { staticClass: "fad fa-fast-forward" })
+    ])
   }
 ]
 render._withStripped = true
@@ -50986,8 +51229,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /var/www/laravel-vue-components/resources/js/app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! /var/www/laravel-vue-components/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\laragon\www\laravel-vue-components\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\laragon\www\laravel-vue-components\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
